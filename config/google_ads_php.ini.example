@@ -1,0 +1,24 @@
+
+[GOOGLE_ADS]
+
+developerToken = ""
+
+loginCustomerId = ""
+
+[OAUTH2]
+clientId = ""
+clientSecret = ""
+refreshToken = ""
+[LOGGING]
+; Log level: DEBUG, INFO, WARNING, ERROR
+logLevel = "INFO"
+; Optional: Path to log file (leave empty for default location)
+logFilePath = ""
+
+[CONNECTION]
+; Optional: Proxy URL if needed
+proxy = ""
+; Optional: Transport method (grpc or rest)
+transport = "rest"
+; Optional: gRPC channel security (true/false)
+grpcChannelIsSecure = true
