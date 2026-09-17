@@ -25,6 +25,51 @@ class SpendingController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        return $this->spending($request, 'customer_ids');
+    }
+
+    /**
+     * Get spending data for a GMB customer within a date range
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function gmb(Request $request): JsonResponse
+    {
+        return $this->spending($request, 'gmb_ids');
+    }
+
+    /**
+     * Get spending data for a garage customer within a date range
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function garage(Request $request): JsonResponse
+    {
+        return $this->spending($request, 'garage_ids');
+    }
+
+    /**
+     * Get spending data for a tyre customer within a date range
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function tyre(Request $request): JsonResponse
+    {
+        return $this->spending($request, 'tyre_ids');
+    }
+
+    /**
+     * Shared spending lookup, scoped to a specific category's customer ID allow-list
+     *
+     * @param Request $request
+     * @param string $configKey Key under services.google_ads holding the allowed customer IDs
+     * @return JsonResponse
+     */
+    protected function spending(Request $request, string $configKey): JsonResponse
+    {
         // Validate API key
         $apiKey = $request->get('key');
         $expectedApiKey = config('services.google_ads.api_key');
@@ -44,7 +89,7 @@ class SpendingController extends Controller
             ], 400);
         }
 
-        if (!in_array($customerId, config('services.google_ads.customer_ids'))) {
+        if (!in_array($customerId, config("services.google_ads.{$configKey}"))) {
             return response()->json([
                 'error' => 'Invalid customer ID'
             ], 400);
