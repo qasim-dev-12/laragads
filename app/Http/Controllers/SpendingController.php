@@ -93,21 +93,16 @@ class SpendingController extends Controller
 
 
         // Get and validate customer ID (remove dashes if present)
-        $customerId = str_replace('-', '', $request->get('customer_id'));
-        if (!$customerId) {
-            return response()->json([
-                'error' => 'customer_id parameter is required'
-            ], 400);
-        }
+        $rawCustomerId = $request->get('customer_id');
+        $customerId = $rawCustomerId ? str_replace('-', '', $rawCustomerId) : null;
 
-        if (!in_array($customerId, config("services.google_ads.{$configKey}"))) {
+        $allowedIds = config("services.google_ads.{$configKey}");
+
+        if ($customerId && !in_array($customerId, $allowedIds)) {
             return response()->json([
                 'error' => 'Invalid customer ID'
             ], 400);
         }
-
-
-        // dd($customerId);
 
         // Get date range (default to current day if not provided)
         $startDate = $request->get('start_date');
@@ -135,6 +130,39 @@ class SpendingController extends Controller
             return response()->json([
                 'error' => 'Invalid date format. Use YYYY-MM-DD format'
             ], 400);
+        }
+
+        // No customer_id given: fetch data for every ID in this category's list
+        if (!$customerId) {
+            $results = [];
+
+            foreach ($allowedIds as $id) {
+                try {
+                    $data = $this->googleAdsService->getDailySpend($id, $startDate, $endDate);
+
+                    $results[$id] = [
+                        'success' => true,
+                        'totals' => $data['totals'],
+                        'daily_breakdown' => $data['daily_breakdown'],
+                        'count' => $data['count'],
+                    ];
+                } catch (Exception $e) {
+                    $results[$id] = [
+                        'success' => false,
+                        'error' => 'An error occurred while fetching spending data',
+                        'message' => $e->getMessage(),
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'date_range' => [
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                ],
+                'results' => $results,
+            ]);
         }
 
         try {
