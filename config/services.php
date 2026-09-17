@@ -40,49 +40,41 @@ return [
         'api_key' => env('API_KEY', 'wisevisiontest'),
         // Master list used by SpendingController to validate any incoming customer_id.
         // Excludes 9486155847 (Royal Auto Maintenance - no admin access) and 2342328484 (Suspended).
-        'customer_ids' => [
+        'battery_ids' => [
 
-            '5338176252', // Germanautos.com
+
             '1966568739', // 800mybatt
             '5997615193', // 800Battery.com
             '2260001647', // GMB Abu Dhabi
             '6886934984', // 800sayara dubai
-            '6267682600', // Tyre
-            '1543050984', // GMB
-            '2864209607', // GMB
-            '2671900464', // GMB
-            '1848779768', // GMB
-            '6315440435', // GMB
-            '3673874794', // GMB
-            '8466805998', // GMB
-            '7258632939', // GMB
-            '4135584694', // GMB
-            '4556106500', // GMB
-            '9932553829', // GMB
-
+            
         ],
 
-        'gmb_ids' => [
 
-            '2260001647', // GMB Abu Dhabi
+        'gmb_ids' => [
             '1543050984', // GMB
+
+
             '2864209607', // GMB
             '2671900464', // GMB
             '1848779768', // GMB
+            '9486155847', // GMB
             '6315440435', // GMB
             '3673874794', // GMB
             '8466805998', // GMB
             '7258632939', // GMB
             '4135584694', // GMB
+            '2343232484', // GMB
             '4556106500', // GMB
             '9932553829', // GMB
+
 
         ],
 
         'garage_ids' => [
 
-            '5338176252', // Germanautos.com
-            '6886934984', // 800sayara dubai
+            '5338176252',
+
 
         ],
 
