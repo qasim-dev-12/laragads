@@ -51,6 +51,17 @@ class SpendingController extends Controller
     }
 
     /**
+     * Get spending data for a battery customer within a date range
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function battery(Request $request): JsonResponse
+    {
+        return $this->spending($request, 'battery_ids');
+    }
+
+    /**
      * Get spending data for a tyre customer within a date range
      *
      * @param Request $request
